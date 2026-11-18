@@ -191,7 +191,7 @@ def downsample_png():
 # x-height 64, descenders to -30, y grows UP from the baseline. Each glyph
 # is (advance, [stroke polylines], [filled dots (cx, cy, r)]).
 
-def _arc(cx, cy, rx, ry, a0, a1, n=14):
+def _arc(cx, cy, rx, ry, a0, a1, n=30):
     """Points along an elliptical arc, angles in degrees, y up."""
     pts = []
     for i in range(n + 1):
@@ -201,58 +201,64 @@ def _arc(cx, cy, rx, ry, a0, a1, n=14):
 
 
 def _ell(cx, cy, rx, ry):
-    return _arc(cx, cy, rx, ry, 0, 360, 26)
+    return _arc(cx, cy, rx, ry, 0, 360, 48)
 
 
 GLYPHS = {
     # ---------------------------------------------------------- capitals
-    'A': (74, [[(2, 0), (37, 100), (72, 0)], [(15, 36), (59, 36)]], []),
-    'B': (70, [[(10, 0), (10, 100)],
-               [(10, 100), (36, 100)] + _arc(36, 77, 22, 23, 90, -90),
-               [(10, 54), (38, 54)] + _arc(38, 27, 24, 27, 90, -90)], []),
-    'C': (72, [_arc(38, 50, 34, 50, 52, 308)], []),
-    'D': (74, [[(8, 0), (8, 100)],
-               [(8, 100), (34, 100)] + _arc(34, 50, 32, 50, 90, -90)], []),
-    'E': (62, [[(58, 100), (8, 100), (8, 0), (60, 0)],
-               [(8, 52), (50, 52)]], []),
-    'F': (58, [[(58, 100), (8, 100), (8, 0)], [(8, 52), (48, 52)]], []),
-    'G': (76, [_arc(39, 50, 35, 50, 48, 312), [(45, 44), (74, 44), (74, 18)]], []),
-    'H': (74, [[(8, 0), (8, 100)], [(66, 0), (66, 100)],
-               [(8, 52), (66, 52)]], []),
-    'I': (28, [[(14, 0), (14, 100)], [(4, 100), (24, 100)],
-               [(4, 0), (24, 0)]], []),
-    'J': (54, [[(50, 100), (50, 30)] + _arc(28, 30, 22, 30, 0, -160)], []),
-    'K': (70, [[(8, 0), (8, 100)], [(64, 100), (14, 48)],
-               [(26, 58), (66, 0)]], []),
-    'L': (58, [[(8, 100), (8, 0), (58, 0)]], []),
-    'M': (88, [[(6, 0), (6, 100), (44, 36), (82, 100), (82, 0)]], []),
-    'N': (76, [[(8, 0), (8, 100), (68, 0), (68, 100)]], []),
-    'O': (78, [_ell(39, 50, 35, 50)], []),
-    'P': (66, [[(10, 0), (10, 100)],
-               [(10, 100), (36, 100)] + _arc(36, 75, 22, 25, 90, -90)], []),
-    'Q': (78, [_ell(39, 50, 35, 50), [(46, 24), (76, -4)]], []),
-    'R': (68, [[(10, 0), (10, 100)],
-               [(10, 100), (36, 100)] + _arc(36, 75, 22, 25, 90, -90),
-               [(34, 50), (66, 0)]], []),
-    'S': (66, [[(58, 86), (46, 98), (26, 99), (12, 88), (11, 72),
-                (20, 60), (46, 46), (57, 34), (54, 16), (38, 3),
-                (18, 3), (6, 14)]], []),
-    'T': (66, [[(4, 100), (62, 100)], [(33, 100), (33, 0)]], []),
-    'U': (74, [[(8, 100), (8, 36)] + _arc(37, 36, 29, 36, 180, 360)
-               + [(66, 100)]], []),
-    'V': (72, [[(2, 100), (36, 0), (70, 100)]], []),
-    'W': (96, [[(2, 100), (18, 0), (48, 70), (78, 0), (94, 100)]], []),
-    'X': (68, [[(6, 100), (62, 0)], [(62, 100), (6, 0)]], []),
-    'Y': (68, [[(4, 100), (34, 52), (64, 100)], [(34, 52), (34, 0)]], []),
-    'Z': (66, [[(6, 100), (60, 100), (6, 0), (62, 0)]], []),
+    # Redesigned on a strict grid: stems at x=11, bowls as true ellipse
+    # arcs, closed bowls, W with its middle vertex at mid height, and
+    # advances wide enough that bold ink stays inside the advance box.
+    'A': (78, [[(7, 0), (40, 100), (73, 0)], [(18, 34), (62, 34)]], []),
+    'B': (74, [[(11, 0), (11, 100)],
+               [(11, 100), (35, 100)] + _arc(35, 76, 23, 24, 90, -90)
+               + [(11, 52)],
+               [(11, 52), (37, 52)] + _arc(37, 26, 25, 26, 90, -90)
+               + [(11, 0)]], []),
+    'C': (78, [_arc(42, 50, 34, 50, 54, 306)], []),
+    'D': (78, [[(11, 0), (11, 100)],
+               [(11, 100), (33, 100)] + _arc(33, 50, 33, 50, 90, -90)
+               + [(11, 0)]], []),
+    'E': (66, [[(58, 100), (11, 100), (11, 0), (60, 0)],
+               [(11, 52), (50, 52)]], []),
+    'F': (62, [[(56, 100), (11, 100), (11, 0)], [(11, 52), (48, 52)]], []),
+    'G': (82, [_arc(41, 50, 35, 50, 52, 314),
+               [(47, 42), (74, 42), (74, 15)]], []),
+    'H': (78, [[(11, 0), (11, 100)], [(67, 0), (67, 100)],
+               [(11, 50), (67, 50)]], []),
+    'I': (30, [[(15, 0), (15, 100)], [(5, 100), (25, 100)],
+               [(5, 0), (25, 0)]], []),
+    'J': (58, [[(6, 100), (52, 100)],
+               [(50, 100), (50, 34)] + _arc(29, 34, 21, 34, 0, -160)], []),
+    'K': (74, [[(11, 0), (11, 100)], [(65, 100), (19, 51)],
+               [(29, 59), (67, 0)]], []),
+    'L': (62, [[(11, 100), (11, 0), (56, 0)]], []),
+    'M': (92, [[(9, 0), (9, 100), (46, 40), (83, 100), (83, 0)]], []),
+    'N': (80, [[(11, 0), (11, 100), (69, 0), (69, 100)]], []),
+    'O': (84, [_ell(42, 50, 37, 50)], []),
+    'P': (70, [[(11, 0), (11, 100)],
+               [(11, 100), (37, 100)] + _arc(37, 76, 23, 24, 90, -90)
+               + [(11, 52)]], []),
+    'Q': (84, [_ell(42, 50, 37, 50), [(52, 24), (81, -3)]], []),
+    'R': (72, [[(11, 0), (11, 100)],
+               [(11, 100), (37, 100)] + _arc(37, 76, 23, 24, 90, -90)
+               + [(11, 52)], [(36, 52), (65, 0)]], []),
+    'S': (70, [_arc(35, 74, 23, 26, 60, 262)
+               + _arc(35, 26, 25, 26, 78, -142)], []),
+    'T': (70, [[(7, 100), (63, 100)], [(35, 100), (35, 0)]], []),
+    'U': (78, [[(11, 100), (11, 38)] + _arc(39, 38, 28, 38, 180, 360)
+               + [(67, 100)]], []),
+    'V': (78, [[(6, 100), (39, 0), (72, 100)]], []),
+    'W': (102, [[(4, 100), (20, 0), (50, 54), (80, 0), (96, 100)]], []),
+    'X': (72, [[(9, 100), (63, 0)], [(63, 100), (9, 0)]], []),
+    'Y': (72, [[(6, 100), (36, 53), (66, 100)], [(36, 53), (36, 0)]], []),
+    'Z': (70, [[(9, 100), (61, 100), (9, 0), (61, 0)]], []),
     # ---------------------------------------------------------- lowercase
-    'a': (56, [_ell(26, 30, 24, 30), [(50, 64), (50, 0)]], []),
+    'a': (58, [_ell(26, 31, 23, 31), [(49, 64), (49, 0)]], []),
     'b': (58, [[(8, 0), (8, 100)], _ell(32, 30, 24, 30)], []),
     'c': (52, [_arc(27, 32, 23, 32, 55, 305)], []),
     'd': (58, [_ell(26, 30, 24, 30), [(50, 100), (50, 0)]], []),
-    'e': (54, [[(6, 36), (48, 36)],
-               [(48, 38), (38, 58), (20, 63), (8, 51), (5, 34),
-                (10, 15), (24, 4), (40, 6), (49, 16)]], []),
+    'e': (56, [[(8, 35), (48, 35)], _arc(28, 31, 21, 31, -30, 300)], []),
     'f': (34, [[(36, 92), (26, 101), (15, 97), (12, 84), (12, 0)],
                [(2, 64), (30, 64)]], []),
     'g': (58, [_ell(27, 34, 23, 30),
@@ -280,42 +286,39 @@ GLYPHS = {
     'q': (58, [_ell(26, 32, 24, 32), [(50, 64), (50, -30), (57, -36)]], []),
     'r': (38, [[(8, 64), (8, 0)],
                [(8, 38), (15, 58), (27, 64), (37, 59)]], []),
-    's': (50, [[(43, 53), (33, 63), (17, 63), (8, 53), (9, 41),
-                (19, 32), (35, 25), (42, 15), (35, 4), (19, 2),
-                (8, 9)]], []),
+    's': (52, [_arc(26, 47, 16, 17, 60, 262)
+               + _arc(26, 17, 17, 17, 78, -142)], []),
     't': (34, [[(18, 88), (18, 13), (24, 3), (34, 3)],
                [(4, 64), (32, 64)]], []),
     'u': (58, [[(8, 64), (8, 28), (14, 8), (27, 2), (41, 7),
                 (48, 22)], [(48, 64), (48, 0)]], []),
     'v': (52, [[(2, 64), (26, 0), (50, 64)]], []),
-    'w': (74, [[(2, 64), (12, 0), (37, 46), (62, 0), (72, 64)]], []),
+    'w': (74, [[(2, 64), (12, 0), (37, 34), (62, 0), (72, 64)]], []),
     'x': (50, [[(4, 64), (46, 0)], [(46, 64), (4, 0)]], []),
     'y': (54, [[(2, 64), (27, 16)], [(52, 64), (27, 16), (27, -12),
                (20, -26), (8, -27), (2, -19)]], []),
     'z': (50, [[(4, 64), (46, 64), (4, 0), (48, 0)]], []),
     # ---------------------------------------------------------- digits
-    '0': (68, [_ell(34, 50, 28, 50)], []),
-    '1': (46, [[(10, 74), (27, 98), (27, 0)], [(9, 0), (45, 0)]], []),
-    '2': (62, [[(12, 82), (24, 97), (40, 96), (50, 80), (42, 58),
-                (16, 26), (8, 6), (8, 0), (56, 0)]], []),
-    '3': (62, [[(12, 86), (26, 99), (42, 96), (48, 82), (38, 64),
-                (22, 54), (38, 48), (50, 32), (44, 12), (26, 2),
-                (10, 8), (6, 20)]], []),
-    '4': (66, [[(44, 100), (12, 28), (62, 28)], [(44, 100), (44, 0)]], []),
-    '5': (60, [[(52, 100), (14, 100), (12, 58), (24, 67), (40, 65),
-                (50, 49), (44, 18), (28, 4), (12, 8), (6, 20)]], []),
-    '6': (62, [[(48, 90), (32, 100), (18, 88), (11, 60), (9, 34)],
-               _ell(31, 27, 22, 27)], []),
-    '7': (60, [[(6, 100), (54, 100), (26, 0)]], []),
-    '8': (62, [_ell(31, 74, 19, 25), _ell(31, 28, 24, 28)], []),
-    '9': (62, [_ell(31, 72, 22, 27),
-               [(53, 68), (51, 38), (42, 13), (26, 3), (11, 9)]], []),
+    '0': (72, [_ell(36, 50, 29, 50)], []),
+    '1': (52, [[(14, 74), (29, 100), (29, 0)], [(12, 0), (46, 0)]], []),
+    '2': (66, [_arc(33, 71, 22, 27, 145, -52) + [(12, 0), (58, 0)]], []),
+    '3': (66, [_arc(33, 73, 21, 25, 125, -90)
+               + _arc(35, 25, 23, 25, 90, -158)], []),
+    '4': (68, [[(47, 100), (15, 28), (61, 28)], [(47, 100), (47, 0)]], []),
+    '5': (64, [[(55, 100), (18, 100), (16, 59)]
+               + _arc(35, 29, 20, 29, 102, -122)], []),
+    '6': (66, [[(50, 88), (35, 100), (20, 88), (12, 54), (13, 38)],
+               _ell(32, 26, 22, 26)], []),
+    '7': (62, [[(9, 100), (55, 100), (29, 0)]], []),
+    '8': (64, [_ell(32, 74, 18, 24), _ell(32, 27, 22, 27)], []),
+    '9': (66, [_ell(32, 73, 22, 27),
+               [(54, 69), (52, 37), (43, 13), (28, 2), (13, 7)]], []),
     # ---------------------------------------------------------- punctuation
-    '.': (22, [], [(11, 5, 5)]),
-    ',': (22, [[(15, 2), (10, -13)]], [(11, 7, 5)]),
-    ':': (22, [], [(11, 10, 5), (11, 46, 5)]),
-    ';': (22, [[(15, 2), (10, -13)]], [(11, 48, 5), (11, 7, 5)]),
-    "'": (16, [[(8, 100), (6, 79)]], []),
+    '.': (22, [], [(11, 5, 4.5)]),
+    ',': (22, [[(14, 3), (10, -11)]], [(11, 7, 4.5)]),
+    ':': (22, [], [(11, 10, 4.5), (11, 46, 4.5)]),
+    ';': (22, [[(14, 3), (10, -11)]], [(11, 48, 4.5), (11, 7, 4.5)]),
+    "'": (16, [[(9, 100), (6, 76)]], []),
     '-': (36, [[(6, 40), (30, 40)]], []),
     '!': (22, [[(11, 100), (11, 27)]], [(11, 6, 5)]),
     '?': (56, [[(10, 84), (24, 99), (40, 94), (44, 76), (34, 58),
@@ -325,9 +328,9 @@ GLYPHS = {
     '/': (36, [[(28, 100), (8, 0)]], []),
     '%': (86, [_ell(19, 78, 13, 16), [(67, 100), (19, 0)],
                _ell(67, 22, 13, 16)], []),
-    '$': (60, [[(52, 84), (38, 97), (20, 96), (11, 84), (13, 68),
-                (24, 57), (42, 45), (49, 32), (42, 14), (24, 4),
-                (10, 9)], [(30, 108), (30, -8)]], []),
+    '$': (62, [_arc(31, 72, 20, 26, 60, 262)
+               + _arc(31, 28, 22, 26, 78, -142),
+               [(31, 108), (31, -8)]], []),
     '+': (52, [[(26, 14), (26, 66)], [(6, 40), (46, 40)]], []),
     '°': (30, [_ell(15, 86, 10, 10)], []),
     '·': (20, [], [(10, 34, 4)]),
@@ -356,22 +359,24 @@ def _glyph_mask(ch, size_px, bold):
         return m
     adv, strokes, dots = GLYPHS[ch]
     scale = size_px / 100.0            # glyph units -> output px (1024 sp.)
-    w_units = 15.0 if bold else 10.5   # stroke width in glyph units
+    w_units = 15.5 if bold else 11.5   # stroke width in glyph units
     hw = w_units / 2.0
-    gw = int(math.ceil((adv + w_units) * scale * SS))
+    pad = w_units + 2.0                # mask margin so round glyphs and
+                                       # diagonal feet are never clipped
+    gw = int(math.ceil((adv + 2 * pad) * scale * SS))
     gh = int(math.ceil(140 * scale * SS))
     base = 108.0                       # glyph y of the baseline inside mask
     mask = [[0] * gw for _ in range(gh)]
 
     def stamp(cx, cy, r):
-        x0 = max(0, int((cx - r) * scale * SS))
-        x1 = min(gw - 1, int((cx + r) * scale * SS))
+        x0 = max(0, int((cx + pad - r) * scale * SS))
+        x1 = min(gw - 1, int((cx + pad + r) * scale * SS))
         y0 = max(0, int((base - cy - r) * scale * SS))
         y1 = min(gh - 1, int((base - cy + r) * scale * SS))
         for py in range(y0, y1 + 1):
             gy = base - (py + 0.5) / (scale * SS)
             for px in range(x0, x1 + 1):
-                gx = (px + 0.5) / (scale * SS)
+                gx = (px + 0.5) / (scale * SS) - pad
                 d = math.hypot(gx - cx, gy - cy)
                 cov = r + 0.75 / (scale * SS) - d
                 if cov > 0:
@@ -385,8 +390,8 @@ def _glyph_mask(ch, size_px, bold):
         for i in range(len(path) - 1):
             ax, ay = path[i]
             bx, by = path[i + 1]
-            x0 = max(0, int((min(ax, bx) - hw - 1) * scale * SS))
-            x1 = min(gw - 1, int((max(ax, bx) + hw + 1) * scale * SS))
+            x0 = max(0, int((min(ax, bx) + pad - hw - 1) * scale * SS))
+            x1 = min(gw - 1, int((max(ax, bx) + pad + hw + 1) * scale * SS))
             y0 = max(0, int((base - max(ay, by) - hw - 1) * scale * SS))
             y1 = min(gh - 1, int((base - min(ay, by) + hw + 1) * scale * SS))
             dx, dy = bx - ax, by - ay
@@ -395,7 +400,7 @@ def _glyph_mask(ch, size_px, bold):
                 gy = base - (py + 0.5) / (scale * SS)
                 row = mask[py]
                 for px in range(x0, x1 + 1):
-                    gx = (px + 0.5) / (scale * SS)
+                    gx = (px + 0.5) / (scale * SS) - pad
                     if seg2 == 0:
                         d = math.hypot(gx - ax, gy - ay)
                     else:
@@ -407,7 +412,7 @@ def _glyph_mask(ch, size_px, bold):
                         v = 255 if cov >= 1.5 / (scale * SS) else int(255 * cov * (scale * SS) / 1.5)
                         if v > row[px]:
                             row[px] = v
-    m = (mask, adv * scale, base * scale)
+    m = (mask, adv * scale, base * scale, pad * scale)
     _mask_cache[key] = m
     return m
 
@@ -436,8 +441,8 @@ def draw_text(x, y_base, text, size, rgb, bold=False, tracking=0.0):
         if ch not in GLYPHS:
             cx += SPACE_ADV * size / 100.0 + tracking
             continue
-        mask, adv_px, base_px = _glyph_mask(ch, size, bold)
-        ox = int(round(cx * SS))
+        mask, adv_px, base_px, pad_px = _glyph_mask(ch, size, bold)
+        ox = int(round((cx - pad_px) * SS))
         oy = int(round(y_base * SS - base_px * SS))
         for r, row in enumerate(mask):
             py = oy + r
@@ -560,9 +565,9 @@ def draw_map_panel(x, y, w, h):
         nx = mx + 5.5 if side > 0 else mx - 11.5
         draw_text(nx, my + 3.4, str(num), 9.5, CREAM, bold=True)
     draw_text(x + 14, y + h - 26, "1 KYIV   2 CRIMEA   3 TALLINN   4 HORMUZ",
-              9.5, CREAM, bold=True, tracking=0.6)
+              10, CREAM, bold=True, tracking=0.6)
     draw_text(x + 14, y + h - 11, "5 SHENZHEN   6 MANILA   7 CAPE CANAVERAL",
-              9.5, CREAM, bold=True, tracking=0.6)
+              10, CREAM, bold=True, tracking=0.6)
 
 
 # ---------------------------------------------------------------- pictures
@@ -780,15 +785,15 @@ def compose():
     draw_text_centered(512, 216, "UKRAINE WAR — ESCALATION", 12, RED,
                        bold=True, tracking=2.2)
     draw_text_centered(512, 262, "UKRAINE STRIKES THE KERCH BRIDGE;", 41,
-                       INK, bold=True)
+                       INK, bold=True, tracking=0.5)
     draw_text_centered(512, 309, "RUSSIA ANSWERS OVER KYIV", 41, INK,
-                       bold=True)
+                       bold=True, tracking=0.5)
     draw_bridge_panel(MX, 326, 600, 148)
     draw_map_panel(648, 326, 340, 148)
     draw_text_centered(
         512, 492,
         "The Kerch Bridge, linking Russia with occupied Crimea, after the "
-        "strike at dawn. Right: the day mapped.", 11, SLATE)
+        "strike at dawn. Right: the day mapped.", 12, SLATE)
     deck = ("A span of the bridge came down in the morning attack. Hours "
             "later, Russian missiles hit bridges across the Dnipro in "
             "Kyiv, cutting power, water and heating across the capital.")
@@ -805,30 +810,33 @@ def compose():
               bold=True, tracking=1.4)
     draw_text(col2, 572, "DIPLOMACY — ASEAN AND APEC", 10.5, RED,
               bold=True, tracking=1.4)
-    draw_text(MX, 600, "TANKER MINED IN HORMUZ;", 20.5, INK, bold=True)
-    draw_text(MX, 625, "THIRD US CARRIER ARRIVES", 20.5, INK, bold=True)
+    draw_text(MX, 600, "TANKER MINED IN HORMUZ;", 20.5, INK, bold=True,
+              tracking=0.3)
+    draw_text(MX, 625, "THIRD US CARRIER ARRIVES", 20.5, INK, bold=True,
+              tracking=0.3)
     draw_text(col2, 600, "TRUMP IN MANILA — XI AND PUTIN", 20.5, INK,
-              bold=True)
-    draw_text(col2, 625, "TO MEET HIM IN SHENZHEN", 20.5, INK, bold=True)
+              bold=True, tracking=0.3)
+    draw_text(col2, 625, "TO MEET HIM IN SHENZHEN", 20.5, INK, bold=True,
+              tracking=0.3)
     draw_hormuz_strip(MX, 636, colw, 48)
     draw_summit_strip(col2, 636, colw, 48)
     draw_paragraph(MX, 708,
                    "A tanker struck a mine near the strait and two ships "
                    "caught fire, as the carrier USS Theodore Roosevelt "
-                   "reached the region.", 14, 17.5, colw, INK_SOFT)
+                   "reached the region.", 14.5, 18.5, colw, INK_SOFT)
     draw_paragraph(col2, 708,
                    "The president arrived for the ASEAN summit, and a "
                    "three-way meeting with Xi Jinping and Vladimir Putin "
                    "was confirmed for Thursday in Shenzhen, on the "
-                   "sidelines of APEC.", 14, 17.5, colw, INK_SOFT)
+                   "sidelines of APEC.", 14.5, 18.5, colw, INK_SOFT)
     hrule(758, 1.1, RULE)
 
     # ---- in brief
     hdr = "IN BRIEF — THE REST OF THE DAY"
     hw = text_width(hdr, 13, True, 2.0)
-    draw_text_centered(512, 786, hdr, 13, INK, bold=True, tracking=2.0)
-    hrule(780, 1.0, RULE, x=MX, w=(1024 - hw) / 2 - MX - 14)
-    hrule(780, 1.0, RULE, x=(1024 + hw) / 2 + 14,
+    draw_text_centered(512, 782, hdr, 13, INK, bold=True, tracking=2.0)
+    hrule(776, 1.0, RULE, x=MX, w=(1024 - hw) / 2 - MX - 14)
+    hrule(776, 1.0, RULE, x=(1024 + hw) / 2 + 14,
           w=(1024 - hw) / 2 - MX - 14)
 
     briefs = [
@@ -854,14 +862,14 @@ def compose():
     col_x = [MX, 360.0, 684.0]
     for idx, (icon, head, body) in enumerate(briefs):
         bx = col_x[idx % 3]
-        by = 812.0 if idx < 3 else 900.0
-        icon(bx, by - 26)
-        hl = wrap_text(head, 12, 262, bold=True)
+        by = 810.0 if idx < 3 else 898.0
+        icon(bx, by - 22)
+        hl = wrap_text(head, 13, 258, bold=True)
         for i, ln in enumerate(hl[:2]):
-            draw_text(bx + 42, by + i * 15, ln, 12, INK, bold=True)
-        bl = wrap_text(body, 11.5, 300)
+            draw_text(bx + 48, by + i * 16.5, ln, 13, INK, bold=True)
+        bl = wrap_text(body, 12.5, 300)
         for i, ln in enumerate(bl[:3]):
-            draw_text(bx, by + 36 + i * 14, ln, 11.5, INK_SOFT)
+            draw_text(bx, by + 38 + i * 15.5, ln, 12.5, INK_SOFT)
 
     # footer
     hrule(972, 1.0, RULE)
